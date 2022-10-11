@@ -5,7 +5,7 @@ fn main() {
     let res: isize = data
         .lines()
         .map(|line| line.trim_start_matches('+'))
-        .map(|s| s.parse::<isize>())
+        .map(str::parse::<isize>)
         .map(Result::unwrap)
         .sum();
     println!("Part 1: {}", res);
@@ -13,7 +13,7 @@ fn main() {
     let sequence: Vec<_> = data
         .lines()
         .map(|line| line.trim_start_matches('+'))
-        .map(|s| s.parse::<isize>())
+        .map(str::parse)
         .map(Result::unwrap)
         .collect();
 
@@ -24,8 +24,7 @@ fn main() {
         if set.contains(&last) {
             println!("Part 2: {}", last);
             break;
-        } else {
-            set.insert(last);
         }
+        set.insert(last);
     }
 }

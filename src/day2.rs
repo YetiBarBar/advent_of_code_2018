@@ -32,7 +32,7 @@ fn main() {
     let data = include_str!("../data/day2.data");
     let values = data
         .lines()
-        .map(|line| compute_box_step_1(line))
+        .map(compute_box_step_1)
         .fold((0_isize, 0_isize), |(a, b), (c, d)| (a + c, b + d));
     println!("Step 1: {}", values.0 * values.1);
 
