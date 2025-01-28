@@ -3,7 +3,7 @@ use nom::{
     combinator::map,
     multi::many_m_n,
     sequence::{separated_pair, terminated},
-    IResult,
+    IResult, Parser,
 };
 
 #[derive(Debug)]
@@ -26,7 +26,8 @@ fn header(data: &str) -> IResult<&str, Header> {
             nodes: a,
             metadata: b,
         },
-    )(data)
+    )
+    .parse(data)
 }
 
 fn metadata(data: &str) -> IResult<&str, u64> {
@@ -36,13 +37,15 @@ fn metadata(data: &str) -> IResult<&str, u64> {
 fn nodes(data: &str) -> IResult<&str, Node> {
     let (remain, header) = header(data)?;
 
-    let (remain, nds) = many_m_n(header.nodes as usize, header.nodes as usize, nodes)(remain)?;
+    let (remain, nds) =
+        many_m_n(header.nodes as usize, header.nodes as usize, nodes).parse(remain)?;
 
     let (remain, metadata) = many_m_n(
         header.metadata as usize,
         header.metadata as usize,
         terminated(metadata, char(' ')),
-    )(remain)?;
+    )
+    .parse(remain)?;
 
     IResult::Ok((
         remain,
